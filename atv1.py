@@ -1,41 +1,48 @@
-class tatu():
+class cliente():
     def __init__(self, nome, telefone):
-
         self.nome = nome
         self.telefone = telefone
-
-    def conta():
-        saldo = int(input("Digite o seu saldo: "))
-        sd = 0
-        sq = 0
-        somadeposito = 0
-        somasaque = 0
-        while True:
-            print("""
-                     1 - Saque
-                     2 - Depósito
-                     3 - Sair
-                    """)
-            op = int(input("Digite a opção que deseja realizar: "))
-            if op == 1:
-                saque = int(input("Digite a quantia que deseja sacar: "))
-                if saque >= saldo:
-                    print("""---Operação Inválida---
-                            Não pode sacar uma quantia maior que o seu saldo.
-                            """)
-                if saque < saldo:
-                    saldo = saldo - saque
-                    sq = sq + 1
-                    somasaque = somasaque + saque
-                    
-            if op == 2:
-                deposito = int(input("Digite a quantia que deseja depositar: "))
-                saldo = saldo + deposito
-                sd = sd + 1
-                somadeposito = somadeposito + 1
-                
-            if op == 3:
-                break
-        print("Nº: ",self.telefone,"Nome: ",self.nome,"O seu saldo é de",saldo,"R$, você realizou ",sq,"saques, somando",somasaque,"R$, você tambem realizou",sd,"depósitos, somando",somadeposito,"R$.")
-                
         
+class conta():
+    def __init__(self, clientes, numero, saldo = 0):
+        self.saldo = 0
+        self.clientes = clientes
+        self.numero = numero
+        self.historico = list()
+        self.deposito(saldo)
+
+    def saque(self, valor):
+        if self.saldo >= valor:
+            self.saldo -= valor
+            self.historico.append(["Saque",valor])
+
+    def deposito(self, valor):
+        self.saldo += valor
+        self.historico.append(["Depósito",valor])
+
+
+    def resumo(self):
+        print('CC Número: {} Saldo: R$ {}'
+                .format(self.numero, self.saldo))
+
+    def extrato(self):
+        print("-"*30)
+        print("Extrato CC Nº: {}".format(self.numero))
+        print("-"*30)
+        for op in self.historico:
+            print("{}\t R$ {}".format(op[0], op[1]))
+            print("Saldo: {}".format(self.saldo))
+
+class contaEspecial(conta):
+    def __init__(self, clientes, numero, saldo = 0, limite = 0):
+        conta.__init__(self, clientes, numero, saldo)
+        self.limite = limite
+      
+
+    def saque(self, valor):
+        if self.saldo + self.limite >= valor:
+            self.saldo -= valor
+            self.historico.append(["Saque",valor])
+
+        
+
